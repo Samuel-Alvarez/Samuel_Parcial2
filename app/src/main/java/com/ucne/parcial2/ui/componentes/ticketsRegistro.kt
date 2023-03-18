@@ -49,7 +49,7 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int,
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp, vertical = 50.dp),
+                    .padding(8.dp, vertical = 60.dp),
             ) {
                 OutlinedTextField(
                     value = viewModel.empresa,

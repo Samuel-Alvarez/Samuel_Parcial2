@@ -27,4 +27,16 @@ class TicketsRepository @Inject constructor(
     suspend fun putTickets(id:Int, ticketDto: TicketDto){
         api.putTickets(id, ticketDto)
     }
+
+    fun getTicketsbyId(id: Int): Flow<Resource<TicketDto>> = flow {
+        try {
+            emit(Resource.Loading())
+            val tickets = api.getTicketsbyId(id)
+            emit(Resource.Success(tickets))
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.message ?: "Error HTTP GENERAL"))
+        } catch (e: IOException) {
+            emit(Resource.Error(e.message ?: "verificar tu conexion a internet"))
+        }
+    }
 }

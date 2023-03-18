@@ -13,6 +13,9 @@ interface TicketsApi{
     @GET("api/Tickets")
     suspend fun gestTickes(): List<TicketDto>
 
+    @GET("/api/tickets/{id}")
+    suspend fun getTicketsbyId(@Path("id") id: Int): TicketDto
+
     @PUT("api/Tickets/{id}")
     suspend fun putTickets(@Path("id") id:Int, @Body ticketDto: TicketDto): Response<Unit>
 }

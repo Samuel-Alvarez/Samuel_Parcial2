@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ucne.parcial2.ui.componentes.ticketRegistroNuevo
 import com.ucne.parcial2.ui.componentes.ticketsListado
 import com.ucne.parcial2.ui.componentes.ticketsRegistro
 import com.ucne.parcial2.ui.theme.Parcial2Theme
@@ -55,6 +56,10 @@ fun myApp(){
         ){
             Log.d("Args", it.arguments?.getInt("id").toString())
             ticketsRegistro(navHostController = navHostController, Id = it.arguments?.getInt("id")?: 0)
+        }
+
+        composable(Screen.ticketRegistroNuevo.route){
+            ticketRegistroNuevo(navHostController = navHostController)
         }
     }
 }

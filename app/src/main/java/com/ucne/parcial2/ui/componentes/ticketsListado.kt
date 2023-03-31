@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.TaskAlt
-import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,15 +26,17 @@ fun ticketsListado(navHostController: NavHostController, viewModel: TicketsViewM
 
     Scaffold(
         topBar ={
-            TopAppBar(title = { Text(text = "Listado de Tickets") },
+            TopAppBar(title = { Text(text = "Listado de Tickets") })
+        },
 
-                actions = {
-                    IconButton(onClick = {
-
-                    }) {
-                        //Icon(Icons.Filled.Add, "Add")
-                    }
-                })
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navHostController.navigate(Screen.ticketRegistroNuevo.route)
+                },
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Nuevo")
+            }
         },
 
         ){it
@@ -46,25 +46,26 @@ fun ticketsListado(navHostController: NavHostController, viewModel: TicketsViewM
             .fillMaxSize()
             .padding(it)
         ) {
-            TicketListBody(navHostController = navHostController, uiState.Tickets, Onclick = {})
+            TicketListBody(navHostController = navHostController, uiState.Tickets, Onclick = {}, viewModel)
         }
 
     }
 }
 
 @Composable
-fun TicketListBody( navHostController: NavHostController, ticketList: List<TicketDto>, Onclick : (TicketDto) -> Unit) {
+fun TicketListBody( navHostController: NavHostController, ticketList: List<TicketDto>, Onclick : (TicketDto) -> Unit,
+                    viewModel: TicketsViewModel = hiltViewModel()) {
     Column(modifier = Modifier.fillMaxWidth()) {
         LazyColumn {
             items(ticketList) { tickets ->
-                TicketRow(navHostController = navHostController, tickets)
+                TicketRow(navHostController = navHostController, tickets, viewModel)
             }
         }
     }
 }
 
 @Composable
-fun TicketRow( navHostController: NavHostController,ticket: TicketDto) {
+fun TicketRow( navHostController: NavHostController,ticket: TicketDto, viewModel: TicketsViewModel = hiltViewModel()) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -72,56 +73,66 @@ fun TicketRow( navHostController: NavHostController,ticket: TicketDto) {
             .clickable { navHostController.navigate(Screen.ticketsRegistro.route + "/${ticket.ticketId}") }
     ) {
 
-        Column(
-            modifier = Modifier.fillMaxWidth()
+        Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
 
-        ) {
+            Column(
 
-            Row(
-                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = ticket.empresa,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.weight(3f)
-                )
-                Text(
-                    text = ticket.fecha.substring(0,10),
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.weight(2f)
-                )
 
+                Row(
+
+                ) {
+                    Text(
+                        text = ticket.empresa,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.weight(3f)
+                    )
+                    Text(
+                        text = ticket.fecha.substring(0,10),
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(2f)
+                    )
+
+                }
+
+                Row(modifier = Modifier.fillMaxWidth()){
+                    Text(
+                        text = ticket.asunto,
+                    )
+
+                    Text(
+                        text = "",
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(2f)
+                    )
+
+                    Icon(
+                        imageVector = when (ticket.estatus) {
+                            "Solicitado" -> {
+                                Icons.Default.Star
+                            }
+                            "En espera" -> {
+                                Icons.Default.Update
+                            }
+                            else -> {
+                                Icons.Default.TaskAlt
+
+                            }
+                        }, contentDescription = ticket.estatus,
+                    )
+
+                    IconButton(
+                        onClick = {
+                            viewModel.eliminar(ticket.ticketId)
+                        },
+                        modifier = Modifier.align(alignment = Alignment.Bottom )
+                    ) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
+                    }
+                }
             }
-
-            Row(modifier = Modifier.fillMaxWidth()){
-                Text(
-                    text = ticket.asunto,
-                )
-
-                Text(
-                    text = "",
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.weight(2f)
-                )
-
-                Icon(
-                    imageVector = when (ticket.estatus) {
-                        "Solicitado" -> {
-                            Icons.Default.Star
-                        }
-                        "En espera" -> {
-                            Icons.Default.Update
-                        }
-                        else -> {
-                            Icons.Default.TaskAlt
-
-                        }
-                    }, contentDescription = ticket.estatus,
-                )
-            }
-
-            Divider(Modifier.fillMaxWidth())
 
         }
+        Divider(Modifier.fillMaxWidth())
     }
 }

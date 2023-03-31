@@ -6,6 +6,7 @@ import com.ucne.parcial2.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
@@ -38,5 +39,13 @@ class TicketsRepository @Inject constructor(
         } catch (e: IOException) {
             emit(Resource.Error(e.message ?: "verificar tu conexion a internet"))
         }
+    }
+
+    suspend fun postTicket(ticketDto: TicketDto):TicketDto{
+        return api.postTicket(ticketDto)
+    }
+
+    suspend fun deleteTicket(id: Int): Response<Unit> {
+        return api.deleteticket(id)
     }
 }

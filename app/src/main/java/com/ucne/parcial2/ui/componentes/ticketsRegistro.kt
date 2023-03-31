@@ -23,8 +23,7 @@ import com.ucne.parcial2.view.TicketsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ticketsRegistro(navHostController: NavHostController, Id:Int,
-                    viewModel: TicketsViewModel = hiltViewModel()) {
+fun ticketsRegistro(navHostController: NavHostController, Id:Int, viewModel: TicketsViewModel = hiltViewModel()) {
 
     remember {
         viewModel.setTicket(Id)
@@ -49,7 +48,7 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int,
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp, vertical = 60.dp),
+                    .padding(8.dp, vertical = 50.dp),
             ) {
                 OutlinedTextField(
                     value = viewModel.empresa,
@@ -72,18 +71,6 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int,
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Subject,
-                            contentDescription = null
-                        )
-                    }
-                )
-                OutlinedTextField(
-                    value = viewModel.especificaciones,
-                    onValueChange = { viewModel.especificaciones = it },
-                    label = { Text(text = "Especificaciones") },
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.FolderSpecial,
                             contentDescription = null
                         )
                     }
@@ -130,6 +117,19 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int,
                     }
                 }
 
+                OutlinedTextField(
+                    value = viewModel.especificaciones,
+                    onValueChange = { viewModel.especificaciones = it },
+                    label = { Text(text = "Especificaciones") },
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.FolderSpecial,
+                            contentDescription = null
+                        )
+                    }
+                )
+
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -143,7 +143,8 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int,
                     Text(
                         text = "Guardar",
                         fontWeight = FontWeight.Black,
-                    )
+
+                        )
                 }
             }
         }

@@ -43,6 +43,10 @@ class TicketsViewModel @Inject constructor(
     var especificaciones by mutableStateOf("")
     var estatus by mutableStateOf("")
 
+    var fecha by mutableStateOf("")
+    var encargadoId by mutableStateOf("")
+    var orden by mutableStateOf("")
+
     private var _state = mutableStateOf(TicketsListState())
     val state: State<TicketsListState> = _state
 
@@ -109,4 +113,51 @@ class TicketsViewModel @Inject constructor(
             )
         }
     }
+
+    fun guardar(){
+        viewModelScope.launch {
+            ticketsRepository.postTicket(
+                TicketDto(
+                    ticketId = 0,
+                    fecha = "2023-03-31T01:04:28.866Z",
+                    empresa = empresa,
+                    asunto = asunto,
+                    especificaciones = especificaciones,
+                    encargadoId = encargadoId.toInt(),
+                    estatus = estatus,
+                    orden = orden.toInt()
+                )
+            )
+        }
+    }
+
+    fun eliminar(id:Int){
+        viewModelScope.launch {
+            ticketsRepository.deleteTicket(id)
+
+            ticketsRepository.gestTickes().onEach { result->
+                when(result){
+                    is Resource.Loading -> {
+                        uiState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+
+                    is Resource.Success -> {
+                        uiState.update {
+                            it.copy(Tickets = result.data ?: emptyList())
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        uiState.update {
+                            it.copy(error = result.message ?: "Error desconocido")
+                        }
+                    }
+                }
+            }.launchIn(viewModelScope)
+        }
+
+    }
+
 }

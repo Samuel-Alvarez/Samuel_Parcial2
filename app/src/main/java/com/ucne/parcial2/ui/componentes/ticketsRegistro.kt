@@ -143,8 +143,7 @@ fun ticketsRegistro(navHostController: NavHostController, Id:Int, viewModel: Tic
                     Text(
                         text = "Guardar",
                         fontWeight = FontWeight.Black,
-
-                        )
+                    )
                 }
             }
         }

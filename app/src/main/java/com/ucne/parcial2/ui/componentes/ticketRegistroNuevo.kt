@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,20 +45,9 @@ fun ticketRegistroNuevo(navHostController: NavHostController, viewModel: Tickets
             )
         },
 
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.guardar()
-                    navHostController.navigate(Screen.ticketsListado.route)
-                },
-            ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = "saves")
-            }
-        },
-
         ){it
 
-        Column(modifier = Modifier.fillMaxWidth().padding(8.dp, vertical = 70.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(8.dp, vertical = 60.dp)) {
 
             OutlinedTextField(
                 value = viewModel.fecha,
@@ -190,6 +180,22 @@ fun ticketRegistroNuevo(navHostController: NavHostController, viewModel: Tickets
                     )
                 }
             )
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                onClick = {
+                    viewModel.guardar()
+                    navHostController.navigate(Screen.ticketsListado.route)
+                }
+            ) {
+                Icon(imageVector = Icons.Filled.Save, contentDescription = "Save")
+                Text(
+                    text = "Guardar",
+                    fontWeight = FontWeight.Black,
+                )
+            }
 
         }
 
